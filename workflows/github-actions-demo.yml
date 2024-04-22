@@ -1,0 +1,28 @@
+name: CI
+
+on:
+    push:
+        branches: [ "main" ]
+    pull_request:
+        branches: [ "main" ]
+
+    workflow_dispatch:
+
+jobs:
+    build-job:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v3
+            - run: node -v
+
+    test-job:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v3
+            - run: Devops.html
+
+    deploy-job:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v3
+            - run: echo "Finalizado"
