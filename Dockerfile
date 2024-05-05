@@ -1,6 +1,8 @@
 
 FROM python:3.9-slim
 
+RUN apt-get update && apt-get install -y python3-pip
+
 FROM nginx
 
 RUN rm /usr/share/nginx/html/index.html
