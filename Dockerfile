@@ -31,8 +31,8 @@ RUN apt-get update && apt-get install -y curl unzip \
 # Define a variável de ambiente DISPLAY para o Chrome funcionar corretamente
 ENV DISPLAY=:99
 
-RUN apt-get update && apt-get install -y python3-pip
-
 # Instalação do Robot Framework e da biblioteca Selenium
-RUN pip install robotframework
-RUN pip install robotframework-seleniumlibrary
+RUN apt-get update && \
+    apt-get install -y python3-pip && \
+    pip install --no-cache-dir robotframework robotframework-seleniumlibrary
+
