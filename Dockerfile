@@ -34,4 +34,5 @@ ENV DISPLAY=:99
 RUN apt-get update && apt-get install -y python3-pip
 
 # Instalação do Robot Framework e da biblioteca Selenium
-RUN pip install robotframework robotframework-seleniumlibrary
+RUN pip install robotframework
+RUN pip install robotframework-seleniumlibrary
