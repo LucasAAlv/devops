@@ -27,14 +27,8 @@ jobs:
   build_image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ github.event.repository.name }} .
-    env:
-      IMAGE_NAME: ${{ github.event.repository.name }}
-      CONTAINER_NAME: devops-web-container
+      - name: Pull Docker image
+        run: docker pull lukealvesapp/devops-web-pucpr:latest
 
   run_container:
     runs-on: ubuntu-latest
@@ -44,8 +38,5 @@ jobs:
         uses: actions/checkout@v3
       - name: Run Docker container
         run: |
-          docker run -d -p 8085:80 --name $CONTAINER_NAME $IMAGE_NAME
-          docker exec $CONTAINER_NAME robot tests.robot
-    env:
-      IMAGE_NAME: ${{ github.event.repository.name }}
-      CONTAINER_NAME: devops-web-container
+          docker run -d -p 8085:80 --name devops-web-pucpr lukealvesapp/devops-web-pucpr:latest
+          docker exec devops-web-pucpr robot tests.robot
