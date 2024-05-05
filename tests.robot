@@ -3,7 +3,7 @@ Documentation     Validação de valor
 Library           SeleniumLibrary
 
 *** Variables ***
-${URL}                http://localhost:8085/
+${URL}                https://devops-sable.vercel.app/
 ${title}              /html/body/h1
 ${numeroAleatorio}    /html/body/p
 
