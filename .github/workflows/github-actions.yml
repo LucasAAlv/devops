@@ -39,5 +39,5 @@ jobs:
       - name: Run Docker container
         run: |
             docker run -d -p 8085:80 --name devops-web-pucpr lukealvesapp/devops-web-pucpr:latest
-            docker exec devops-web-pucpr robot /usr/share/nginx/html/tests.robot
+            docker exec devops-web-pucpr robot tests.robot
         
