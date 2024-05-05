@@ -32,6 +32,7 @@ RUN rm /usr/share/nginx/html/index.html
 # Copia os arquivos do aplicativo para o diretório do nginx
 COPY index.html /usr/share/nginx/html
 COPY app.js /usr/share/nginx/html
+COPY tests.robot /usr/share/nginx/html
 
 # Expondo a porta 80 para fora do contêiner
 EXPOSE 80
