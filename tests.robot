@@ -4,13 +4,13 @@ Library           SeleniumLibrary
 
 *** Variables ***
 ${BROWSER}            Chrome
-${URL}                https://devops-sable.vercel.app/
+${URL}                http://localhost:8085/
 ${title}              /html/body/h1
 ${numeroAleatorio}    /html/body/p
 
 *** Keywords ***
 Dado que eu esteja na index
-    Open Browser    ${URL}    ${BROWSER}
+    Open Browser    ${URL}    ${BROWSER}    options=add_argument("--headless")
 
 Entao aguardo carregar os elementos
     Wait until element is visible    ${title}

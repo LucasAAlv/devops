@@ -3,16 +3,15 @@ FROM nginx:latest
 # Instalação de dependências do sistema
 RUN apt-get update && apt-get install -y python3-pip curl wget gnupg unzip python3-venv
 
-# Configuração do ChromeDriver
-ARG CHROMEDRIVER_VERSION=114.0.5735.16
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && curl -O https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip \
-    && unzip chromedriver_linux64.zip -d /usr/local/bin/ \
-    && rm chromedriver_linux64.zip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Baixar e instalar o Chromium
+RUN curl -fsSL "https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux64/chrome-linux64.zip" -o /tmp/chrome-linux64.zip \
+    && unzip /tmp/chrome-linux64.zip -d /usr/local/bin/ \
+    && rm /tmp/chrome-linux64.zip
+
+# Baixar e instalar o ChromeDriver
+RUN curl -fsSL "https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux64/chromedriver-linux64.zip" -o /tmp/chromedriver-linux64.zip \
+    && unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ \
+    && rm /tmp/chromedriver-linux64.zip
 
 # Configuração do ambiente
 ENV DISPLAY=:99
@@ -27,4 +26,4 @@ RUN pip install robotframework robotframework-seleniumlibrary
 # Copia o código da aplicação para o contêiner
 COPY index.html /usr/share/nginx/html
 COPY app.js /usr/share/nginx/html
-COPY tests.robot /usr/share/nginx/html
+COPY tests.robot /usr/share/nginx/html/tests.robot

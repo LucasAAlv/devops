@@ -40,3 +40,13 @@ jobs:
         run: |
             docker run -d -p 8085:80 --name devops-web-container lukealvesapp/devops-web-pucpr:latest
             docker exec devops-web-container robot /usr/share/nginx/html/tests.robot
+
+  deploy_vercel:
+    runs-on: ubuntu-latest
+    needs: run_container # Dependendo do seu fluxo de trabalho, você pode precisar ajustar essa linha para garantir que o job de deploy seja executado após o job anterior ser concluído.
+    steps:
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+      - name: Deploy to Vercel
+        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod
+              
