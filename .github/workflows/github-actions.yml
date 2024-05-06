@@ -43,7 +43,7 @@ jobs:
 
   deploy_vercel:
     runs-on: ubuntu-latest
-    needs: run_container # Dependendo do seu fluxo de trabalho, você pode precisar ajustar essa linha para garantir que o job de deploy seja executado após o job anterior ser concluído.
+    needs: run_container
     steps:
       - name: Install Vercel CLI
         run: npm install -g vercel
