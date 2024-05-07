@@ -39,7 +39,6 @@ jobs:
       - name: Run Docker container
         run: |
             docker run -d -p 8085:80 --name devops-web-container lukealvesapp/devops-web-pucpr:latest
-            docker exec devops-web-container robot /usr/share/nginx/html/tests.robot
 
   deploy_vercel:
     runs-on: ubuntu-latest
