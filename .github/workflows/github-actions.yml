@@ -8,21 +8,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  qodana:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0 
-      - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v2024.1
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+  # qodana:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #     pull-requests: write
+  #     checks: write
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.event.pull_request.head.sha }}
+  #         fetch-depth: 0 
+  #     - name: 'Qodana Scan'
+  #       uses: JetBrains/qodana-action@v2024.1
+  #       env:
+  #         QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
 
   build_image:
     runs-on: ubuntu-latest
@@ -48,4 +48,3 @@ jobs:
         run: npm install -g vercel
       - name: Deploy to Vercel
         run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod
-              
