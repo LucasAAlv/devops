@@ -40,6 +40,24 @@ jobs:
         run: |
             docker run -d -p 8085:80 --name devops-web-container lukealvesapp/devops-web-pucpr:latest
 
+  run_tests:
+    runs-on: ubuntu-latest
+    needs: run_container
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Versão do Node.js
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Unit Tests
+        run: npm test
+
   deploy_vercel:
     runs-on: ubuntu-latest
     needs: run_container
