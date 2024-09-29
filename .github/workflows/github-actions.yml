@@ -73,6 +73,10 @@ jobs:
         id: ${{ secrets.DISCORD_WEBHOOK_ID }}
         token: ${{ secrets.DISCORD_WEBHOOK }}
 
+    permissions:
+      contents: write
+      pull-requests: write
+
   deploy_vercel:
     runs-on: ubuntu-latest
     needs: run_tests
