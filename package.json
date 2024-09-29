@@ -1,0 +1,20 @@
+{
+  "name": "devops",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npx jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jquery": "^3.7.1",
+    "jsdom": "^25.0.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
