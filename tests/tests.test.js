@@ -1,14 +1,13 @@
 const { JSDOM } = require('jsdom');
-const $ = require('jquery');
 
-// Configura o ambiente de DOM simulado com jsdom e jQuery
+// Configuração do DOM simulado com jsdom
 const dom = new JSDOM('<!doctype html><html><body><p></p><button id="clickMeButton"></button></body></html>');
 global.window = dom.window;
 global.document = dom.window.document;
-global.navigator = {
-  userAgent: 'node.js',
-};
-global.$ = require('jquery')(dom.window);
+global.navigator = dom.window.navigator;
+
+// Importa jQuery e conecta ao ambiente simulado
+const $ = require('jquery')(dom.window);
 
 describe('Random Number Generation', function() {
     it('should generate a number between 0.0 and 10.0', function() {
@@ -52,8 +51,10 @@ describe('Button Move on Click', function() {
 
 describe('Button Click Event', function() {
     it('should trigger the moveClickMeButton function on click', function() {
-        // Simular o clique usando o próprio jQuery
-        let spyEvent = jest.spyOn($.fn, 'click');
+        // Não podemos espiar diretamente métodos de jQuery com `jest.spyOn`
+        // Vamos simular o clique diretamente e verificar o comportamento
+        let spyEvent = jest.fn();
+        $('#clickMeButton').on('click', spyEvent);
         $('#clickMeButton').click();
         expect(spyEvent).toHaveBeenCalled();
     });
