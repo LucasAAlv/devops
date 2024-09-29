@@ -63,7 +63,7 @@ jobs:
 
   deploy_vercel:
     runs-on: ubuntu-latest
-    needs: run_container
+    needs: run_tests
     steps:
       - name: Install Vercel CLI
         run: npm install -g vercel
