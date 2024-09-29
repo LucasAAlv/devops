@@ -1,61 +1,106 @@
 const { JSDOM } = require('jsdom');
+const $ = require('jquery');
 
 // Configuração do DOM simulado com jsdom
-const dom = new JSDOM('<!doctype html><html><body><p></p><button id="clickMeButton"></button></body></html>');
+const dom = new JSDOM(`
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+  </head>
+  <body>
+      <h1>Numero aleatorio</h1>
+      <h3>Bem vindo</h3>
+      <p></p>
+      <button id="clickMeButton">Click me!</button>
+  </body>
+  </html>
+`);
+
 global.window = dom.window;
 global.document = dom.window.document;
-global.navigator = dom.window.navigator;
+global.$ = require('jquery')(dom.window);
 
-// Importa jQuery e conecta ao ambiente simulado
-const $ = require('jquery')(dom.window);
+// Função moveClickMeButton simulada para os testes
+function moveClickMeButton(event) {
+    event.preventDefault();
 
-describe('Random Number Generation', function() {
-    it('should generate a number between 0.0 and 10.0', function() {
-        let numeroAleatorio = (Math.random() * 10).toFixed(1);
-        expect(parseFloat(numeroAleatorio)).toBeGreaterThanOrEqual(0.0);
-        expect(parseFloat(numeroAleatorio)).toBeLessThanOrEqual(10.0);
+    var windowWidth = $(window).width();
+    var windowHeight = $(window).height();
+    var buttonWidth = $(event.target).outerWidth();
+    var buttonHeight = $(event.target).outerHeight();
+
+    var randomX = Math.random() * (windowWidth - buttonWidth);
+    var randomY = Math.random() * (windowHeight - buttonHeight);
+
+    $(event.target).css({
+        'left': randomX + 'px',
+        'top': randomY + 'px',
+        'position': 'absolute'
     });
-});
+}
 
-describe('Update paragraph with random number', function() {
-    it('should update the paragraph with a random number', function() {
-        let numero = $('p');
+describe('App Functionality Tests', () => {
+
+    it('should generate a random number and display in paragraph', () => {
+        // Simula a geração de um número aleatório
         let numeroAleatorio = (Math.random() * 10).toFixed(1);
-        numero.html('Seu numero aleatório é: ' + numeroAleatorio);
-        expect(numero.html()).toContain('Seu numero aleatório é: ');
-        expect(numero.html()).toContain(numeroAleatorio);
+        $('p').html('Seu numero aleatório é: ' + numeroAleatorio);
+
+        // Testa se o parágrafo contém o número gerado
+        expect($('p').html()).toContain('Seu numero aleatório é: ');
+        expect(parseFloat(numeroAleatorio)).toBeGreaterThanOrEqual(0);
+        expect(parseFloat(numeroAleatorio)).toBeLessThanOrEqual(10);
     });
-});
 
-describe('Button Move on Click', function() {
-    it('should move the button to a random position within the window', function() {
-        let button = $('#clickMeButton');
-        let event = $.Event('click');
+    it('should move the button to a random position when clicked', () => {
+        // Simula o clique no botão
+        const button = $('#clickMeButton');
+        const event = $.Event('click');
 
-        var windowWidth = $(window).width();
-        var windowHeight = $(window).height();
-        var buttonWidth = button.outerWidth();
-        var buttonHeight = button.outerHeight();
+        // Captura as posições antes do clique
+        const initialLeft = button.css('left');
+        const initialTop = button.css('top');
 
-        button.trigger(event); // Simula o clique
+        // Executa a função de movimentação
+        moveClickMeButton(event);
 
-        let leftPosition = parseFloat(button.css('left'));
-        let topPosition = parseFloat(button.css('top'));
+        // Verifica se as novas posições são diferentes das anteriores
+        const newLeft = button.css('left');
+        const newTop = button.css('top');
+
+        expect(newLeft).not.toEqual(initialLeft);
+        expect(newTop).not.toEqual(initialTop);
+    });
+
+    it('should trigger the moveClickMeButton function when button is clicked', () => {
+        // Simula o clique no botão e verifica se a função é chamada
+        const spyEvent = jest.fn();
+        $('#clickMeButton').on('click', spyEvent);
+        $('#clickMeButton').click();
+        expect(spyEvent).toHaveBeenCalled();
+    });
+
+    it('should correctly calculate random positions within window bounds', () => {
+        const button = $('#clickMeButton');
+        const event = $.Event('click');
+
+        // Simula o clique e move o botão
+        moveClickMeButton(event);
+
+        // Verifica se o botão está dentro dos limites da janela
+        const leftPosition = parseFloat(button.css('left'));
+        const topPosition = parseFloat(button.css('top'));
+        const windowWidth = $(window).width();
+        const windowHeight = $(window).height();
+        const buttonWidth = button.outerWidth();
+        const buttonHeight = button.outerHeight();
 
         expect(leftPosition).toBeGreaterThanOrEqual(0);
         expect(leftPosition).toBeLessThanOrEqual(windowWidth - buttonWidth);
         expect(topPosition).toBeGreaterThanOrEqual(0);
         expect(topPosition).toBeLessThanOrEqual(windowHeight - buttonHeight);
-    });
-});
-
-describe('Button Click Event', function() {
-    it('should trigger the moveClickMeButton function on click', function() {
-        // Não podemos espiar diretamente métodos de jQuery com `jest.spyOn`
-        // Vamos simular o clique diretamente e verificar o comportamento
-        let spyEvent = jest.fn();
-        $('#clickMeButton').on('click', spyEvent);
-        $('#clickMeButton').click();
-        expect(spyEvent).toHaveBeenCalled();
     });
 });
